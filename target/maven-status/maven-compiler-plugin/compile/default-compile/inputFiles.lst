@@ -1,0 +1,9 @@
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/entity/RegisterResponse.java
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/ndnsec/NDNSecManager.java
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/repositories/UserRepository.java
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/entity/LoginResponse.java
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/sqlite/SqliteManager.java
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/AucServiceApplication.java
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/entity/ErrorResponse.java
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/controllers/UserController.java
+/home/ogb/bonvoyage/AUCService/src/main/java/com/ogb/auc/domains/User.java

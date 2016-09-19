@@ -1,0 +1,9 @@
+com/ogb/auc/controllers/UserController.class
+com/ogb/auc/entity/ErrorResponse.class
+com/ogb/auc/ndnsec/NDNSecManager.class
+com/ogb/auc/repositories/UserRepository.class
+com/ogb/auc/entity/RegisterResponse.class
+com/ogb/auc/domains/User.class
+com/ogb/auc/sqlite/SqliteManager.class
+com/ogb/auc/entity/LoginResponse.class
+com/ogb/auc/AucServiceApplication.class
