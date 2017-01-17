@@ -12,9 +12,9 @@ This is the source code of the Authentication Server developed for the European 
 
 - Edit the file "src/main/resources/application.properties"
 
-  > spring.datasource.username = your_mysql_username 
+  > spring.datasource.username = _your_mysql_username_ 
 
-  > spring.datasource.password = your_mysql_password
+  > spring.datasource.password = _your_mysql_password_
 
 - Compile the project with:
   > mvn package -DskipTests
