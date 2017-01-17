@@ -1,7 +1,6 @@
 package com.ogb.auc.domains;
 
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -12,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.hash.Hashing;
-
 
 
 @Entity
@@ -29,14 +27,17 @@ public class User {
 	@Column(name="password")
 	private String password;
 	
-	@Column(name="private_key")
+	@Column(name="private_key", columnDefinition="LONGBLOB")
 	private byte[] privateKey;
 
-	@Column(name="public_key")
+	@Column(name="public_key", columnDefinition="LONGBLOB")
 	private byte[] publicKey;
 	
 	@Column(name="key_locator")
 	private String keyLocator;
+	
+	@Column(name="permission_type")
+	private String permissionType;
 	
 	
 	public User() {
@@ -78,6 +79,9 @@ public class User {
 	public String getKeyLocator() {
 		return keyLocator;
 	}
+	public String getPermissionType() {
+		return permissionType;
+	}
 
 
 	public void setToken(String token) {
@@ -98,4 +102,9 @@ public class User {
 	public void setKeyLocator(String keyLocator) {
 		this.keyLocator = keyLocator;
 	}
+	public void setPermissionType(String permissionType) {
+		this.permissionType = permissionType;
+	}
+
+
 }

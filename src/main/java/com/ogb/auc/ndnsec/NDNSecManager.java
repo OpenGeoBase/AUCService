@@ -5,17 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.util.HashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.data.rest.core.Path;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.ogb.auc.controllers.UserController;
 import com.ogb.fes.filesystem.FileReader;
 
 import net.named_data.jndn.util.Common;
@@ -26,10 +17,7 @@ public class NDNSecManager {
 	public static String NDN_PATH;
 	public static String NDN_MAP_FILE_PATH;
 	public static String idPrefix; 
-	
-	//@Autowired
-	//public Environment env;
-	
+
 	private HashMap<String, String> mappingFileTable; 
 	
 	private static NDNSecManager sharedInstance = null;
@@ -88,17 +76,17 @@ public class NDNSecManager {
 		return null;
 	}
 	
-	public byte[] getPrivateKeyFromUsername(String tenant, String username) {
+	public byte[] getPrivateKeyFromUsername(String tenant, String username, String permissionType) {
 		
-		return getPrivateKeyFromUserIdentifier(idPrefix+"/"+ tenant +"/"+username);
+		return getPrivateKeyFromUserIdentifier(idPrefix+"/"+ tenant + "/" + username + "/" + permissionType);
 	}
 	public byte[] getPrivateKeyFromUserIdentifier(String userIdentifier) {
 		
 		return getKeyFromUserIdentifier(userIdentifier, "pri");
 	}
-	public byte[] getPublicKeyFromUsername(String tenant, String username) {
+	public byte[] getPublicKeyFromUsername(String tenant, String username, String permissionType) {
 		
-		return getPublicKeyFromUserIentifier(idPrefix+"/"+ tenant +"/"+username);
+		return getPublicKeyFromUserIentifier(idPrefix + "/" + tenant + "/" + username + "/" + permissionType);
 	}
 	public byte[] getPublicKeyFromUserIentifier(String userIdentifier) {
 		
@@ -129,23 +117,23 @@ public class NDNSecManager {
 		return Common.base64Decode(contents.toString());
 	}
 	
-	public HashMap<String,byte[]> generateKeyAndCertificate(String tenantName, String userName) {
+	public HashMap<String,byte[]> generateKeyAndCertificate(String tenantName, String userName, String permissionType) {
 		
 		boolean success        = false;
-		boolean generation = generatePrivateKey(userName, tenantName);
+		boolean generation = generatePrivateKey(userName, tenantName, permissionType);
 		if (generation == true)
 		{
-			byte[]  privateKeyData = getPrivateKeyFromUsername(tenantName, userName);
-			byte[]  publicKeyData = getPublicKeyFromUsername(tenantName, userName);
+			byte[]  privateKeyData = getPrivateKeyFromUsername(tenantName, userName, permissionType);
+			byte[]  publicKeyData = getPublicKeyFromUsername(tenantName, userName, permissionType);
 			
 		
 			if (privateKeyData != null) 
 			{
-				String certFileName = tenantName + "_" + userName + ".req";
-				success = generateCertificate(tenantName, userName, certFileName, tenantName);
+				String certFileName = tenantName + "_" + userName + "_" + permissionType + ".req";
+				success = generateCertificate(tenantName, userName, certFileName, tenantName, permissionType);
 	
 				
-				success &= installCertificate(tenantName + "_" + userName + ".cert");
+				success &= installCertificate(tenantName + "_" + userName + "_" + permissionType + ".cert");
 			}
 			
 			if (success == true)
@@ -160,13 +148,14 @@ public class NDNSecManager {
 		return null;
 	}
 	
-	private boolean generatePrivateKey(String userName, String tenantName) {
+	private boolean generatePrivateKey(String userName, String tenantName, String permissionType) {
 
 		String   homePath = System.getProperty("user.home") + "/cert/";
 		if (new File(homePath).exists() == false)
 			new File(homePath).mkdir();
 		
-		String   command  = "ndnsec-keygen -n "+idPrefix+"/"+tenantName+"/"+userName+" > "+homePath+tenantName+"_"+userName+".req";
+		String   command  = "ndnsec-keygen -n "+idPrefix+"/"+tenantName+"/"+userName+"/"+permissionType+
+											  " > "+homePath+tenantName+"_"+userName+"_"+permissionType+".req";
 		System.out.println(command);
 		String[] args     = new String[] {"/bin/bash", "-c", command};
 		
@@ -184,14 +173,14 @@ public class NDNSecManager {
 		}
 	}
 	
-	private boolean generateCertificate(String tenantName, String userName, String certFileName, String signer) {
+	private boolean generateCertificate(String tenantName, String userName, String certFileName, String signer, String permissionType) {
 		String   homePath = System.getProperty("user.home") + "/cert/";
 		if (new File(homePath).exists() == false)
 			new File(homePath).mkdir();
 		
-		String command = "ndnsec-certgen -N " + idPrefix + "/" + tenantName + "/" + userName+
+		String command = "ndnsec-certgen -N " + idPrefix + "/" + tenantName + "/" + userName + "/" + permissionType +
 									   " -s " + idPrefix + "/" + signer + " " +
-									   homePath + certFileName + " > " + homePath + tenantName + "_" + userName + ".cert";
+									   homePath + certFileName + " > " + homePath + tenantName + "_" + userName + "_" + permissionType + ".cert";
 		System.out.println(command);
 		String[] args = new String[] { "/bin/bash", "-c", command };
 		
